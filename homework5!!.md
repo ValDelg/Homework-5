@@ -1,0 +1,58 @@
+#Valery Delgado
+#Homework 5
+#October 7, 2022
+#Econometrics and Statistics 
+#Team members: Holli Tai and Liam O'Neill 
+
+
+load("/Users/valerydelgado/Downloads/acs2017_ny_data.RData")
+View(acs2017_ny)
+attach(acs2017_ny)
+use_varb <- (AGE >= 25) & (AGE <= 55) & (LABFORCE == 2) & (WKSWORK2 > 4) & (UHRSWORK >= 35) & (CLASSWKRD)
+dat_use <- subset(acs2017_ny,use_varb)  
+detach()
+attach(data_use)
+as.factor(CLASSWKRD)
+summary(CLASSWKRD)
+
+is.na(INCWAGE) <- which(INCWAGE == 9999999)
+model_temp1 <- lm(INCWAGE ~ AGE+ CLASSWKRD + educ_somecoll + educ_college + educ_advdeg,data=data_use)
+summary(model_temp1) 
+plot(model_temp1)
+
+
+lm(INCWAGE ~ as.factor(CLASSWKRD), data=data_use)
+
+data <- (CLASSWKRD)
+View(acs2017_ny)
+hist(acs2017_ny$CLASSWKRD)
+hist(acs2017_ny$INCWAGE, xlim=c(100000,900000))
+
+Data1<-c(INCWAGE)
+Data2<-c(CLASSWKRD)
+
+#Attempt of creating a plot graph
+plot(Data1, type="o", main="Line graph", xlab="classwkrd", ylab="income",col="Green", ylim=c(100000,900000))
+lines(Data2,type="l", col="Red")
+
+
+install.packages("AER")
+require(AER)
+
+install.packages("yhat")
+
+install.packages("stargazer")
+require(stargazer)
+stargazer(model_temp1, type = "text")
+NNobs <- length(INCWAGE)
+(INCWAGE)
+set.seed(12345)
+graph_obs <- (runif(NNobs) < 0.1) 
+dat_graph <-subset(data_use,graph_obs)  
+plot(INCWAGE ~ jitter(AGE, factor = 2), pch = 10, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), data = dat_graph)
+plot(INCWAGE ~ jitter(AGE, factor = 5), pch = 10, col = rgb(0.5, 0.5, 0.5, alpha = 0.2), ylim = c(0,150000), data = dat_graph)
+to_be_predicted2 <- data.frame(AGE = 25:55,classwkrd = 1,educ_somecoll=1,educ_college = 1, educ_advdeg = 1)
+to_be_predicted2$yhat <- predict(model_temp1, newdata = to_be_predicted2)
+lines(yhat ~ AGE, data = to_be_predicted2)
+
+#Based on the regression for income wage as the dependent variable it has demonstrated that the education level between some college,college and advanced degree does have a correlation with wage.For instance, someone with a higher education has an occupation has a higher pay. In terms of the regression those that are a certain type of worker is statistically  significantly impacts the data negatively  such that an employer could possibly earn the same as a federal employee unless when taking education level. As we can see those depending on their class of work but have a advanced degree earn 28,095 more than others that do not have a very high level of education as compared to a college which is 23,008. Therefore, we can see a 5,087.37 difference between education of college and education of advanced degree. All of the data is statisitcally significant at all confidence intervals.
